@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UXML xmlns="UnityEngine.UIElements">
-    <Label text="Wind Simulation UI" />
+    <VisualElement style="width: 100%; height: 100%; flex-direction: column; padding: 10px;">
+        
+        <Label text="Wind Simulation Controls" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;" />
+
+        <Label text="Wind Speed" />
+        <Slider name="WindSpeedSlider" min="0" max="20" value="5" style="width: 100%;" />
+        
+        <Label text="Turbulence" />
+        <Slider name="TurbulenceSlider" min="0" max="5" value="1" style="width: 100%;" />
+
+        <Label text="Wind Direction (X)" />
+        <Slider name="WindDirectionX" min="-1" max="1" value="1" style="width: 100%;" />
+        
+        <Label text="Wind Direction (Z)" />
+        <Slider name="WindDirectionZ" min="-1" max="1" value="0" style="width: 100%;" />
+
+        <Button name="ApplyButton" text="Apply Wind Settings" style="margin-top: 10px;" />
+
+        <Toggle name="UseGPU" text="Use GPU Acceleration" style="margin-top: 10px;" />
+
+        <Label text="EPW File Import" style="margin-top: 10px;" />
+        <Button name="LoadEPWFile" text="Load EPW File" />
+        <DropdownField name="EPWDaySelection" />
+        <DropdownField name="EPWHourSelection" />
+        
+        <Label text="Buildings" style="margin-top: 10px;" />
+        <Button name="AddBuildingButton" text="Add 40m Cube" />
+        <Button name="ImportBuildingButton" text="Import OBJ/FBX" />
+        
+        <Label text="Wind Speed Legend" style="margin-top: 10px;" />
+        <VisualElement name="WindLegend" style="width: 100%; height: 20px; background-color: linear-gradient(to right, blue, red);" />
+        
+    </VisualElement>
 </UXML>
