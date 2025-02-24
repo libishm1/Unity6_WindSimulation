@@ -1,4 +1,4 @@
-Unity 6 Wind Simulation
+## Unity 6 Wind Simulation
 This repository contains a complete, out-of-the-box CFD-like wind simulation project for Unity 6. It replicates the visual aesthetics of Autodesk Flow Design and includes:
 
 Continuous Wind Streamlines with velocity-based color gradients (legend included).
@@ -14,7 +14,7 @@ Display a wind speed legend (with a color gradient from slow (blue) to fast (red
 An Editor Script to auto-generate a sample scene with all required GameObjects.
 The simulation is optimized for real-time performance in Unity 6 (6000.0.39f1 LTS) and automatically falls back to CPU mode if compute shaders aren’t supported.
 
-Table of Contents
+## Table of Contents
 Installation
 Scene Setup
 Scripts and Files
@@ -23,59 +23,63 @@ File Structure
 Features
 License
 Installation
-Prerequisites
+
+## Prerequisites
 Unity 6 (6000.0.39f1 LTS)
 Install via Unity Hub with the following modules:
 Windows Build Support (DirectX 12)
 Linux/macOS Build Support (Vulkan/Metal)
 Universal Render Pipeline (URP)
-Creating the Project
+
+## Creating the Project
 Open Unity Hub and click New Project.
 Select the "3D Sample Scene (URP)" template.
 Name the project "Wind_Simulation" and choose a save location.
 Click Create Project.
-Scene Setup
-Add the Wind Source
+
+## Scene Setup
+# Add the Wind Source
 In the Unity Editor, select GameObject > 3D Object > Plane.
 Rename it WindSource.
 Set its Position to (0, 0.5, -10).
 Set its Scale to (10, 1, 10).
-Add a 40m Tall Building Placeholder
+
+# Add a 40m Tall Building Placeholder
 Select GameObject > 3D Object > Cube.
 Rename it Building.
 Set its Position to (0, 20, 0) (placing its base at ground level and top at 40m).
 Set its Scale to (10, 40, 10).
-Save the Scene
+# Save the Scene
 Go to File > Save As.
 Save the scene as WindSimulation.unity inside the Assets/Scenes/ folder.
-Scripts and Files
+# Scripts and Files
 All scripts are located in the Assets/Scripts/ folder. Below is an overview of each script:
 
-WindFlowManager.cs
+# WindFlowManager.cs
 Generates and updates wind streamlines based on user-adjustable parameters and turbulence.
 (See Section 4.1 below for code.)
 
-WindUIManager.cs
+# WindUIManager.cs
 Connects UI elements (from the UXML file) to the wind simulation, allowing the selection of presets and manual adjustment.
 (See Section 4.2 below for code.)
 
-EPWManager.cs
+# EPWManager.cs
 Provides optional support for loading and parsing an EPW file. Users can select a day and hour to update the wind speed and direction accordingly.
 (See Section 4.3 below for code.)
 
-BuildingManager.cs
+# BuildingManager.cs
 Allows the addition (up to 5) and removal of building placeholders (40m tall cubes) via UI.
 (See Section 4.4 below for code.)
 
-ModelImporter.cs
+# ModelImporter.cs
 Enables importing of external building models (OBJ/FBX) via a UI button.
 (See Section 4.5 below for code.)
 
-WindLegendUI.cs
+# WindLegendUI.cs
 Displays a wind speed legend (color gradient with minimum and maximum speed labels).
 (See Section 4.6 below for code.)
 
-CreateSampleScene.cs (Editor Script)
+# CreateSampleScene.cs (Editor Script)
 Automatically creates a sample scene with the WindSource, Building, WindManager, BuildingManager, and UI GameObjects.
 (See Section 4.7 below for code.)
 
@@ -108,7 +112,7 @@ Code Sections
 5. UI Document (WindUI.uxml)
 (See code block above in the UI Document section.)
 
-File Structure
+## File Structure
 Copy
 Edit
 Wind_Simulation/
@@ -131,16 +135,16 @@ Wind_Simulation/
 │       └── WindUI.uxml
 ├── ProjectSettings/
 └── README.md
-Usage
-Open the Project in Unity 6:
+## Usage
+# Open the Project in Unity 6:
 
-Launch Unity Hub, click Add, and select the project folder (Wind_Simulation).
+# Launch Unity Hub, click Add, and select the project folder (Wind_Simulation).
 Open the Sample Scene:
 
-In Unity, navigate to File > Open Scene, then select Assets/Scenes/WindSimulation.unity.
+# In Unity, navigate to File > Open Scene, then select Assets/Scenes/WindSimulation.unity.
 Assign UI Document:
 
-In your UIManagerObject, ensure that the UIDocument component’s Source Asset is set to Assets/UI/WindUI.uxml.
+# In your UIManagerObject, ensure that the UIDocument component’s Source Asset is set to Assets/UI/WindUI.uxml.
 Run the Simulation:
 
 Press the Play button in the Unity Editor.
@@ -158,7 +162,7 @@ Customize the UI further by editing the UXML file and adding a USS file for styl
 Conclusion
 This project is designed to work out-of-the-box in Unity 6 and provides a robust, interactive CFD-like wind simulation that matches the visual aesthetic of Autodesk Flow Design. Follow the above instructions to install, set up, and run the simulation. Feel free to adjust parameters and extend functionality as needed.
 
-License
+## License
 GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007
 
