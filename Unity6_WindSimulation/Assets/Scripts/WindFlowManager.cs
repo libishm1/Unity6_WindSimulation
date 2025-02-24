@@ -19,6 +19,11 @@ public class WindFlowManager : MonoBehaviour
 
     void Start()
     {
+        if (windLinePrefab == null)
+        {
+            Debug.LogError("WindLinePrefab is missing! Please assign it in the inspector.");
+            return;
+        }
         timeOffset = Random.Range(0f, 100f);
         GenerateWindLines();
     }
@@ -30,7 +35,14 @@ public class WindFlowManager : MonoBehaviour
 
     void GenerateWindLines()
     {
-        Vector3 planePosition = transform.position;
+        GameObject plane = GameObject.Find("WindSource");
+        if (plane == null)
+        {
+            Debug.LogError("WindSource not found in the scene!");
+            return;
+        }
+        Vector3 planePosition = plane.transform.position;
+
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -48,13 +60,12 @@ public class WindFlowManager : MonoBehaviour
 
     void UpdateWindLines()
     {
-        float time = Time.time * 0.5f;
         foreach (GameObject line in windLines)
         {
             Vector3 startPos = line.transform.position;
-            float turbulenceX = (Mathf.PerlinNoise(startPos.z * noiseScale + timeOffset, time) - 0.5f) * turbulenceStrength;
-            float turbulenceY = (Mathf.PerlinNoise(startPos.x * noiseScale + timeOffset, time) - 0.5f) * turbulenceStrength;
-            float turbulenceZ = (Mathf.PerlinNoise(startPos.y * noiseScale + timeOffset, time) - 0.5f) * turbulenceStrength;
+            float turbulenceX = (Mathf.PerlinNoise(startPos.z * noiseScale, Time.time) - 0.5f) * turbulenceStrength;
+            float turbulenceY = (Mathf.PerlinNoise(startPos.x * noiseScale, Time.time) - 0.5f) * turbulenceStrength;
+            float turbulenceZ = (Mathf.PerlinNoise(startPos.y * noiseScale, Time.time) - 0.5f) * turbulenceStrength;
             Vector3 turbulence = new Vector3(turbulenceX, turbulenceY, turbulenceZ);
             Vector3 finalWindVector = (windDirection.normalized * windSpeed) + turbulence;
             Vector3 endPos = startPos + finalWindVector * 0.5f;
@@ -72,3 +83,4 @@ public class WindFlowManager : MonoBehaviour
         }
     }
 }
+
