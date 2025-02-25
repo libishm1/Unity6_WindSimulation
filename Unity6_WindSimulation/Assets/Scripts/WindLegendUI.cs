@@ -1,41 +1,72 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Dynamically creates a 1D gradient texture based on windSpeedGradient
+/// and applies it to the "WindLegend" VisualElement background.
+/// </summary>
 public class WindLegendUI : MonoBehaviour
 {
+    [Tooltip("A gradient (blue-to-red, etc.) for displaying wind speed range.")]
+    public Gradient windSpeedGradient;
+
+    [Tooltip("Minimum wind speed displayed in the legend.")]
+    public float minSpeed = 0f;
+
+    [Tooltip("Maximum wind speed displayed in the legend.")]
+    public float maxSpeed = 20f;
+
+    // Adjust textureWidth as needed for finer gradient resolution
+    private const int textureWidth = 256;
+    private const int textureHeight = 1;
+    
     private VisualElement windLegend;
+    private Texture2D legendTexture;
 
     void Start()
     {
-        var uiDocument = GetComponent<UIDocument>();
-        if (uiDocument == null)
+        // Retrieve the UIDocument & "WindLegend" element
+        var uiDoc = GetComponent<UIDocument>();
+        if (uiDoc == null)
         {
-            Debug.LogError("UIDocument not found on this GameObject!");
+            Debug.LogError("No UIDocument found on this GameObject for WindLegendUI.");
             return;
         }
 
-        var root = uiDocument.rootVisualElement;
+        var root = uiDoc.rootVisualElement;
         windLegend = root.Q<VisualElement>("WindLegend");
 
         if (windLegend == null)
         {
-            Debug.LogError("WindLegend UI Element not found!");
+            Debug.LogError("No 'WindLegend' VisualElement found in this UI.");
             return;
         }
 
-        UpdateWindLegend();
+        // Generate and apply the gradient texture
+        legendTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
+        GenerateGradientTexture();
+        legendTexture.Apply();
+
+        // Assign the texture as a background image
+        windLegend.style.backgroundImage = new StyleBackground(legendTexture);
     }
 
     /// <summary>
-    /// Updates the wind legend color gradient dynamically.
+    /// Creates a 1D horizontal gradient texture that maps from minSpeed to maxSpeed.
     /// </summary>
-    public void UpdateWindLegend()
+    private void GenerateGradientTexture()
     {
-        if (windLegend != null)
+        for (int x = 0; x < textureWidth; x++)
         {
-            // Set a background gradient for wind speed visualization
-            windLegend.style.backgroundColor = new StyleColor(new Color(0, 0, 1)); // Start with blue
-            windLegend.style.unityBackgroundImageTintColor = new Color(1, 0, 0, 1); // End with red
+            // Normalized t from 0..1
+            float t = (float)x / (textureWidth - 1);
+
+            // Evaluate color in the gradient at t
+            // (In advanced usage, you could map t to wind speeds between minSpeed..maxSpeed)
+            Color c = windSpeedGradient.Evaluate(t);
+
+            // Set pixel color
+            legendTexture.SetPixel(x, 0, c);
         }
     }
 }
