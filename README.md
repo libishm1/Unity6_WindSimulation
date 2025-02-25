@@ -1,183 +1,104 @@
-# Unity 6 Wind Simulation
-This repository contains a complete, out-of-the-box CFD-like wind simulation project for Unity 6. It replicates the visual aesthetics of Autodesk Forma Flow Design and includes:
+# Unity 6 Wind Simulation – Beginner Guide
 
-## 🌪 Features
-✅ **Continuous Wind Streamlines** with velocity-based color gradients (legend included).  
-✅ **Wind Source (Plane)** where wind streamlines originate.  
-✅ **40m Tall Building Placeholders** (Cubes scaled to `(10, 40, 10)`).  
-✅ **Building Manager** to add up to 5 building placeholders or import custom models (OBJ/FBX).  
-✅ **UI Controls (Unity UI Toolkit) to:**  
-   - Select **wind presets** (City, Coastal, Mountains, Storm, Custom).  
-   - Adjust **wind speed, direction (X, Y, Z), turbulence, vortex intensity, and height-based wind effects**.  
-   - Toggle **GPU Compute mode** (auto CPU fallback if unsupported).  
-   - Toggle **EPW weather data** (select day/hour for real-world wind).  
-   - Display a **wind speed legend** (color gradient from slow (blue) to fast (red)).  
-✅ **Editor Script** to auto-generate a sample scene with all required GameObjects.  
+## 🌪 Overview
+Welcome to the **Unity 6 Wind Simulation Project**! This real-time simulation includes:
+- **Streamline wind visualization** with **color-coded velocity & turbulence**.
+- **Adjustable wind properties** (speed, turbulence, vortex intensity, GPU toggle).
+- **Building deflection system** (wind redirects around objects).
+- **Real-world weather data support** (via EPW files).
 
-This simulation is **optimized for real-time performance in Unity 6 (6000.0.39f1 LTS)** with GPU acceleration **(fallback to CPU if unsupported).**  
+Designed for **novices**, this guide will help you **set up & run** the simulation in **Unity 6**.
 
 ---
 
-## 📌 Table of Contents
-1. [Installation](#installation)  
-2. [Scene Setup](#scene-setup)  
-3. [Scripts and Files](#scripts-and-files)  
-4. [Usage](#usage)  
-5. [File Structure](#file-structure)  
-6. [Features](#features)  
-7. [License](#license)  
+## 📥 Installation & Setup
+
+### ✅ 1. Prerequisites
+- **Unity Hub** with **Unity 6 (6000.0.39f1 LTS)** installed.
+- **Universal Render Pipeline (URP)** enabled.
+- **Windows/Linux/macOS Build Support**.
+
+### ✅ 2. Creating a New Unity Project
+1. Open **Unity Hub** → **New Project**.
+2. Select **"3D Sample Scene (URP)"** template.
+3. Name it **"Wind_Simulation"** → Click **Create**.
+
+### ✅ 3. Adding the Wind Simulation Files
+1. **Download** this repository.
+2. Copy **`Assets/`**, **`ProjectSettings/`**, and **`Packages/`** into your new project folder.
+3. Open Unity **(if not open)** → Click **Add Project** → Select the folder.
+4. **Wait for Unity to re-import**.
 
 ---
 
-## 📥 Installation
+## 🎮 Running the Simulation
 
-### Prerequisites  
-- **Unity 6 (6000.0.39f1 LTS)**  
-- Install via Unity Hub with:  
-  - ✅ **Windows Build Support (DirectX 12)**  
-  - ✅ **Linux/macOS Build Support (Vulkan/Metal)**  
-  - ✅ **Universal Render Pipeline (URP)**  
+### 🎬 1. Open the Scene
+- **Project Window** → `Assets/Scenes/WindSimulation.unity` → **Double-click to open**.
 
-### Creating the Project  
-1. **Open Unity Hub** → Click **New Project**.  
-2. **Select** the `"3D Sample Scene (URP)"` template.  
-3. **Set Name:** `"Wind_Simulation"` → **Choose Save Location**.  
-4. **Click Create Project**.  
+### 🎛 2. Assign the UI
+1. **Find the GameObject** with `WindUIManager.cs` (e.g. `UIManagerObject`).
+2. **In the Inspector**, set **UIDocument > Source Asset** to `WindUI.uxml`.
+
+### ▶ 3. Press Play
+- The wind simulation **runs in real time**.
+- UI appears with **sliders, toggles & buttons**.
 
 ---
 
-## 🌪 Scene Setup
+## 🌟 Features & Controls
 
-### **1️⃣ Add the Wind Source**  
-- **Unity Editor** → `GameObject > 3D Object > Plane`  
-- **Rename:** `WindSource`  
-- **Position:** `(0, 0.5, -10)`  
-- **Scale:** `(10, 1, 10)`  
+### 🏙 **Building Management**
+- **`Add Building`** → Places a **40m cube** as a wind obstacle.
+- **`Import OBJ`** → Loads custom **building models** (`.obj` or `.fbx`).
 
-### **2️⃣ Add a 40m Tall Building Placeholder**  
-- **Unity Editor** → `GameObject > 3D Object > Cube`  
-- **Rename:** `Building`  
-- **Position:** `(0, 20, 0)`  
-- **Scale:** `(10, 40, 10)`  
+### 💨 **Wind Controls**
+- **`Wind Speed`** → Adjusts airflow velocity.
+- **`Turbulence`** → Controls random swirls.
+- **`Vortex Intensity`** → Increases eddies & rotation.
+- **`Height-Based Wind`** → Higher buildings face stronger winds.
+- **`GPU Compute`** → If supported, **faster wind updates** (else, CPU fallback).
 
-### **3️⃣ Save the Scene**  
-- **File > Save As** → `WindSimulation.unity` inside `Assets/Scenes/`  
-
----
-
-## 🖥️ Scripts and Files
-
-### **1️⃣ `WindFlowManager.cs`**  
-- **Handles wind physics calculations.**  
-- Uses **Bezier curves for wind paths** & **Flow Noise for turbulence**.  
-- **GPU Compute Shader Toggle (auto CPU fallback).**  
-
-### **2️⃣ `WindUIManager.cs`**  
-- **Connects UI sliders** to wind speed, turbulence, and vortex intensity.  
-- **Adds GPU toggle switch (CPU fallback if unsupported).**  
-
-### **3️⃣ `BuildingManager.cs`**  
-- **Adds/removes buildings dynamically via UI.**  
-- **Buildings automatically interact with wind streamlines.**  
-
-### **4️⃣ `EPWManager.cs`**  
-- **Loads real-world wind data** from **EPW weather files**.  
-- **Users can select date/hour** from UI.  
-
-### **5️⃣ `WindLegendUI.cs`**  
-- **Displays color-coded wind speed legend** (blue = slow, red = fast).  
-
-### **6️⃣ `CreateSampleScene.cs` (Editor Script)**  
-- **Auto-generates Wind Source, Buildings, UI, & WindManager.**  
-
-### **7️⃣ `WindUI.uxml`**  
-- **Controls UI layout (sliders, buttons, toggles).**  
-- **Allows real-time adjustments.**  
+### 🌀 **Real-World Wind Data (EPW)**
+- **Load an `.epw` file** → WindSpeed & Direction auto-adjust to real weather.
 
 ---
 
-## 📂 File Structure
+## 🛠 Additional Tools
 
-```
-Wind_Simulation/
-├── Assets/
-│   ├── Editor/
-│   │   └── CreateSampleScene.cs
-│   ├── Prefabs/
-│   │   ├── Building.prefab
-│   │   └── WindLinePrefab.prefab
-│   ├── Scenes/
-│   │   └── WindSimulation.unity
-│   ├── Scripts/
-│   │   ├── BuildingManager.cs
-│   │   ├── EPWManager.cs
-│   │   ├── WindFlowManager.cs
-│   │   ├── WindLegendUI.cs
-│   │   ├── WindUIManager.cs
-│   ├── UI/
-│   │   └── WindUI.uxml
-└── README.md
-```
+### 📂 **Importing OBJ/FBX Models**
+- **Click "Import Building Model"** → Select `.obj` or `.fbx`.
+- The model **loads into the scene** and acts as a wind obstacle.
+
+### 🔧 **Auto-Generate Sample Scene** *(Editor-Only)*
+- **Unity Menu** → `"Tools > Create Wind Simulation Sample Scene"`.
 
 ---
 
-## 🎮 Usage
+## 🏗 How the Wind Works
 
-### **1️⃣ Open the Project in Unity 6**
-- **Unity Hub** → Click **Add** → Select the project folder (`Wind_Simulation`).  
+### 🌊 **Wind Lines (Streamlines)**
+- Generated using **Bezier curves** for **smooth airflow**.
+- Color-coded: **Blue = Slow**, **Red = Fast**.
 
-### **2️⃣ Open the Sample Scene**
-- **Unity Editor** → `File > Open Scene` → Select `Assets/Scenes/WindSimulation.unity`.  
+### ⛩ **Building Deflection**
+- **Wind bends around obstacles** tagged `"Building"`.
+- Uses **Physics OverlapSphere** to detect structures.
 
-### **3️⃣ Assign UI Document**
-- **In UIManagerObject**, ensure **UIDocument** component is linked to `Assets/UI/WindUI.uxml`.  
-
-### **4️⃣ Run the Simulation**
-1. **Press Play** in the Unity Editor.  
-2. **Use the UI to:**  
-   - **Select a wind preset** from the dropdown.  
-   - **Adjust Wind Speed, Wind Direction (X, Y, Z), and Turbulence.**  
-   - **Toggle GPU Compute Mode (fallback to CPU if unsupported).**  
-   - **Load EPW Weather Data** (`Load File` → Select Date & Hour).  
-   - **Add Buildings (max 5) or Import Custom OBJ/FBX Models.**  
-   - **View the Wind Speed Legend** (color gradient).  
+### ⚙ **GPU/CPU Performance**
+- If **GPU Compute** is supported, it’s **10x faster**.
+- If **GPU isn’t available**, it **automatically switches to CPU**.
 
 ---
 
-## 🛠 Extra Steps
+## 📜 License: GPL v3
 
-✅ **Auto-Generate Sample Scene**
-- **Run Editor Script:** `Tools > Create Wind Simulation Sample Scene`.  
+- **✅ You can modify & share this project freely**.
+- **⚠ If you distribute changes, they must remain open-source**.
+- **⚠ No Warranty: Use at your own risk.**
 
-✅ **Adjust Velocity Gradient**
-- **Inspector → WindFlowManager → Modify Gradient**.  
-
-✅ **Customize UI Further**
-- **Edit `WindUI.uxml`** (for styling).  
+Full license: [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
 
 ---
 
-## 📝 License
-
-**GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007**  
-
-🔹 **This program is free software**: You can redistribute & modify it under **GPL v3**.  
-🔹 **No Warranty**: This software is provided **"as-is"** without guarantees.  
-
-For full legal terms, visit: [GNU.org](https://www.gnu.org/licenses/gpl-3.0.html).
-
----
-
-## 🎯 Final Notes
-
-✅ **Full GPU/CPU fail-safe system included.**  
-✅ **Supports real-world wind conditions via EPW files.**  
-✅ **Toggle between CPU & GPU compute shaders.**  
-✅ **Wind turbulence, vortex strength, and deflection dynamically calculated.**  
-
-🚀 **Next Steps?**  
-1️⃣ **Higher fidelity wind simulation with more turbulence?**  
-2️⃣ **Better GPU optimization for large-scale city modeling?**  
-3️⃣ **A `.unitypackage` for one-click import?**  
-
-Let me know how you'd like to refine it further! 🚀  
+### 🎯 **Ready to Start?** Press **Play** & enjoy your **real-time wind simulation**! 🚀
