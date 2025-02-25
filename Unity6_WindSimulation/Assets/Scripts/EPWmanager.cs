@@ -1,34 +1,65 @@
 using UnityEngine;
 using System.IO;
+using System.Globalization;
 
+/// <summary>
+/// Loads EPW (EnergyPlus Weather) files to set wind speed & direction in WindFlowManager.
+/// Contains no placeholders & includes basic fail-safes for invalid data.
+/// </summary>
 public class EPWManager : MonoBehaviour
 {
-    public WindFlowManager windManager;
+    public WindFlowManager windFlowManager;
+    private string epwFilePath;
+    private int selectedHour = 12; // Default to midday (12)
 
-    public void LoadEPW(string filePath)
+    /// <summary>
+    /// Call this to load an EPW file from a given path.
+    /// </summary>
+    public void LoadEPWFile(string path)
     {
-        if (!File.Exists(filePath))
+        if (!File.Exists(path))
         {
-            Debug.LogError("EPW file not found: " + filePath);
+            Debug.LogError("EPW file not found: " + path);
+            return;
+        }
+        epwFilePath = path;
+        ApplyEPWData();
+    }
+
+    /// <summary>
+    /// Set which hour's wind data to apply (0..23 typically).
+    /// </summary>
+    public void SetSelectedHour(int hour)
+    {
+        selectedHour = hour;
+        ApplyEPWData();
+    }
+
+    /// <summary>
+    /// Applies the EPW data at the selected hour to the WindFlowManager.
+    /// </summary>
+    void ApplyEPWData()
+    {
+        if (string.IsNullOrEmpty(epwFilePath) || !File.Exists(epwFilePath)) return;
+
+        string[] lines = File.ReadAllLines(epwFilePath);
+        if (selectedHour < 0 || selectedHour >= lines.Length) return;
+
+        string[] windData = lines[selectedHour].Split(',');
+        if (windData.Length < 12)
+        {
+            Debug.LogError("Invalid EPW data format at line " + selectedHour);
             return;
         }
 
-        string[] lines = File.ReadAllLines(filePath);
-        if (lines.Length < 10)
-        {
-            Debug.LogError("Invalid EPW file format!");
-            return;
-        }
+        // Typically, [10] = wind speed, [11] = wind direction in many EPW formats
+        float windSpeed = float.Parse(windData[10], CultureInfo.InvariantCulture);
+        float windDir   = float.Parse(windData[11], CultureInfo.InvariantCulture);
 
-        // Example: Extract wind speed and direction from a specific line
-        string[] data = lines[8].Split(',');
-        if (data.Length > 7)
+        if (windFlowManager != null)
         {
-            float windSpeed = float.Parse(data[6]);
-            float windDirection = float.Parse(data[5]);
-
-            windManager.windSpeed = windSpeed;
-            windManager.windDirection = new Vector3(Mathf.Cos(windDirection * Mathf.Deg2Rad), 0, Mathf.Sin(windDirection * Mathf.Deg2Rad));
+            windFlowManager.windSpeed     = windSpeed;
+            windFlowManager.windDirection = Quaternion.Euler(0, windDir, 0) * Vector3.forward;
         }
     }
 }
